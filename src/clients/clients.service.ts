@@ -13,29 +13,28 @@ export class ClientsService {
     @InjectModel(Client.name) private clientModel: Model<Client>,
   ) {}
 
-  User: any = [];
   create(createClientDto: CreateClientDto) {
     const createdClient = new this.clientModel(createClientDto);
     return createdClient.save();
   }
 
-  findAll() {
-    return this.clientModel.find().exec();
+  async findAll() {
+    return await this.clientModel.find().exec();
   }
 
-  findOne(id: string) {
-    return this.clientModel.findOne({ _id: id }).exec();
+  async findOne(id: string) {
+    return await this.clientModel.findOne({ _id: id }).exec();
   }
 
-  update(id: string, updateClientDto: CreateClientDto) {
+  async update(id: string, updateClientDto: CreateClientDto) {
     return this.clientModel.findOneAndUpdate({ _id: id }, updateClientDto);
   }
 
-  remove(id: string) {
-    return this.clientModel.findByIdAndDelete({ _id: id }).exec();
+  async remove(id: string) {
+    return await this.clientModel.findByIdAndDelete({ _id: id }).exec();
   }
 
-  addCar(updateBody, id) {
+  async addCar(updateBody, id) {
     updateBody._id = uuidv4();
     return this.clientModel.findOneAndUpdate(
       { _id: id },
@@ -70,6 +69,9 @@ export class ClientsService {
   }
 
   getServicesByCar(id: string, carId: string) {
-    return this.clientModel.findOne({ _id: id, 'service.carId': carId }, {service:1,cars:1});
+    return this.clientModel.findOne(
+      { _id: id, 'service.carId': carId },
+      { service: 1, cars: 1 },
+    );
   }
 }
