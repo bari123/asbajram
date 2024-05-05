@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{cors:true});
+  const app = await NestFactory.create(AppModule);
   // app.use(function (req, res, next) {
   //   res.header('Access-Control-Allow-Origin', '*');
   //   res.header(
@@ -12,11 +12,11 @@ async function bootstrap() {
   //   );
   //   next();
   // });
-  // app.enableCors({
-  //   origin: true,
-  //   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  //   credentials: true,
-  // });
+  app.enableCors({
+    origin: 'https://autoservicebajram.netlify.app',
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    credentials: true,
+  });
 
   await app.listen(3000);
 }
