@@ -1,0 +1,75 @@
+import { Injectable } from '@nestjs/common';
+import { CreateClientDto } from './dto/create-client.dto';
+import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Client } from '../schemas/client.schema';
+import { v4 as uuidv4 } from 'uuid';
+
+@Injectable()
+export class ClientsService {
+  constructor(
+    private jwtService: JwtService,
+    @InjectModel(Client.name) private clientModel: Model<Client>,
+  ) {}
+
+  User: any = [];
+  create(createClientDto: CreateClientDto) {
+    const createdClient = new this.clientModel(createClientDto);
+    return createdClient.save();
+  }
+
+  findAll() {
+    return this.clientModel.find().exec();
+  }
+
+  findOne(id: string) {
+    return this.clientModel.findOne({ _id: id }).exec();
+  }
+
+  update(id: string, updateClientDto: CreateClientDto) {
+    return this.clientModel.findOneAndUpdate({ _id: id }, updateClientDto);
+  }
+
+  remove(id: string) {
+    return this.clientModel.findByIdAndDelete({ _id: id }).exec();
+  }
+
+  addCar(updateBody, id) {
+    updateBody._id = uuidv4();
+    return this.clientModel.findOneAndUpdate(
+      { _id: id },
+      { $push: { cars: updateBody } },
+      { new: true },
+    );
+  }
+
+  getCars(id: string) {
+    return this.clientModel.findOne({ _id: id }, 'cars');
+  }
+
+  deleteCar(carId, clientId) {
+    return this.clientModel.findOneAndUpdate(
+      { _id: clientId },
+      { $pull: { cars: { _id: carId } } },
+      { new: true },
+    );
+  }
+
+  addService(clientId: string, service: any) {
+    service.serviceId = uuidv4();
+    return this.clientModel.findOneAndUpdate(
+      { _id: clientId },
+      { $push: { service: service } },
+      { new: true },
+    );
+  }
+
+  getServices(id) {
+    return this.clientModel.findOne({ _id: id }, 'service');
+  }
+
+  getServicesByCar(id: string, carId: string) {
+    return this.clientModel.findOne({ _id: id, 'service.carId': carId }, {service:1,cars:1});
+  }
+}
