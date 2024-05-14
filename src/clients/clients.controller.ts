@@ -54,6 +54,15 @@ export class ClientsController {
     return this.clientsService.deleteCar(carId, clientId);
   }
 
+  @Patch('/:id/car/:carId')
+  editCar(
+    @Param('carId') carId: string,
+    @Param('id') clientId: string,
+    @Body() newCar: any,
+  ) {
+    return this.clientsService.editCar(carId, clientId, newCar);
+  }
+
   @Post('/:id/service')
   addService(@Param('id') clientId: string, @Body() service: any) {
     service.createdAt = new Date().toLocaleDateString();

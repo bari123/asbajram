@@ -20,9 +20,9 @@ export class AgendaController {
     return this.agendaService.create(createAgendaDto);
   }
 
-  @Get('getAll')
-  findAll() {
-    return this.agendaService.findAll();
+  @Post('getAll')
+  findAll(@Body() currentDate: any) {
+    return this.agendaService.findAll(currentDate);
   }
 
   @Get(':id')
@@ -31,7 +31,7 @@ export class AgendaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAgendaDto:any) {
+  update(@Param('id') id: string, @Body() updateAgendaDto: any) {
     return this.agendaService.update(+id, updateAgendaDto);
   }
 

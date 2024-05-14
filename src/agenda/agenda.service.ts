@@ -25,8 +25,8 @@ export class AgendaService {
     }
   }
 
-  async findAll() {
-    return await this.agendaModel.find().exec();
+  async findAll(currentDate: any) {
+    return await this.agendaModel.find({ date: currentDate.currentDate });
   }
 
   findOne(id: number) {

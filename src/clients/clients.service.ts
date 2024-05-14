@@ -55,6 +55,13 @@ export class ClientsService {
     );
   }
 
+  editCar(carId, clientId, car) {
+    return this.clientModel.findOneAndUpdate(
+      { _id: clientId, 'cars._id': carId },
+      { cars: car },
+    );
+  }
+
   addService(clientId: string, service: any) {
     service.serviceId = uuidv4();
     return this.clientModel.findOneAndUpdate(
@@ -65,13 +72,19 @@ export class ClientsService {
   }
 
   getServices(id) {
-    return this.clientModel.findOne({ _id: id }, 'service');
+    return this.clientModel
+      .findOne({ _id: id }, 'service')
+      .limit(5)
+      .sort({ createdAt: -1 });
   }
 
   getServicesByCar(id: string, carId: string) {
-    return this.clientModel.findOne(
+    const test = this.clientModel.findOne(
       { _id: id, 'service.carId': carId },
       { service: 1, cars: 1 },
     );
+    console.log(test);
+
+    return test;
   }
 }
