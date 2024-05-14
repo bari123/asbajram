@@ -2,13 +2,14 @@ import { CarsModel } from '../../schemas/client.schema';
 
 export interface CreateAgendaDto {
   lift: {
-    time: string;
+    time: string[];
     lift: string;
     car: CarsModel;
     client: ClientModel;
     service: ServiceModel;
   };
   date: string;
+  estimation: number;
 }
 
 export interface ClientModel {

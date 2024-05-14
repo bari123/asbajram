@@ -79,12 +79,9 @@ export class ClientsService {
   }
 
   getServicesByCar(id: string, carId: string) {
-    const test = this.clientModel.findOne(
+    return this.clientModel.findOne(
       { _id: id, 'service.carId': carId },
       { service: 1, cars: 1 },
     );
-    console.log(test);
-
-    return test;
   }
 }

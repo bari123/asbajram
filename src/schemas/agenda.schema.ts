@@ -7,7 +7,7 @@ export class LiftModel {
   @Prop()
   lift: string;
   @Prop()
-  time: string;
+  time: string[];
   @Prop()
   car: CarsModel[];
 
@@ -27,6 +27,9 @@ export class Agenda {
 
   @Prop()
   date: string;
+
+  @Prop()
+  estimation: number;
 }
 
 export const AgendaSchema = SchemaFactory.createForClass(Agenda);
