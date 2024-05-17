@@ -6,6 +6,7 @@ export interface CreateAgendaDto {
     lift: string;
     car: CarsModel;
     client: ClientModel;
+    status: string;
     service: ServiceModel;
   };
   date: string;

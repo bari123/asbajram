@@ -49,6 +49,11 @@ export class ClientsController {
     return this.clientsService.getCars(id);
   }
 
+  @Get('/:id/getCar/:carId')
+  getCar(@Param('id') id: string, @Param('carId') carId: string) {
+    return this.clientsService.getCar(id, carId);
+  }
+
   @Delete('/:id/car/:carId')
   deleteCar(@Param('carId') carId: string, @Param('id') clientId: string) {
     return this.clientsService.deleteCar(carId, clientId);
@@ -78,4 +83,6 @@ export class ClientsController {
   getServicesByCar(@Param('id') id: string, @Param('carId') carId: string) {
     return this.clientsService.getServicesByCar(id, carId);
   }
+
+
 }

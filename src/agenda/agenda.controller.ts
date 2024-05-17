@@ -37,6 +37,11 @@ export class AgendaController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.agendaService.remove(+id);
+    return this.agendaService.remove(id);
+  }
+
+  @Post('/:id/finish')
+  editService(@Param('id') serviceId: string) {
+    return this.agendaService.editService(serviceId);
   }
 }

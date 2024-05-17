@@ -8,24 +8,23 @@ import { Agenda } from '../schemas/agenda.schema';
 @Injectable()
 export class AgendaService {
   constructor(@InjectModel(Agenda.name) private agendaModel: Model<Agenda>) {}
+
   async create(createAgendaDto: CreateAgendaDto) {
-    if (createAgendaDto.date === new Date().toLocaleDateString()) {
-      if (createAgendaDto.estimation > 1) {
-        createAgendaDto.lift.time = this.generateTimeSlots(
-          createAgendaDto.lift.time,
-          createAgendaDto.estimation,
-        );
-      }
-      const updated = await this.agendaModel.findOneAndUpdate(
-        { date: createAgendaDto.date, estimation: createAgendaDto.estimation },
-        { $push: { lift: createAgendaDto.lift } },
-        { new: true },
-      );
-      if (!updated) {
-        const createdClient = new this.agendaModel(createAgendaDto);
-        return createdClient.save();
-      }
-    } else {
+    const { date, estimation, lift } = createAgendaDto;
+
+    if (estimation > 1) {
+      lift.time = this.generateTimeSlots(lift.time, estimation);
+    }
+
+    lift.status = 'Not Done';
+
+    const updated = await this.agendaModel.findOneAndUpdate(
+      { date, estimation },
+      { $set: { lift: lift } },
+      { new: true },
+    );
+
+    if (!updated) {
       const createdClient = new this.agendaModel(createAgendaDto);
       return createdClient.save();
     }
@@ -43,8 +42,20 @@ export class AgendaService {
     return `This action updates a #${id} agenda`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} agenda`;
+  remove(id: string) {
+    return this.agendaModel.findOneAndDelete({ _id: id });
+  }
+
+  async editService(serviceId) {
+    const existing = await this.agendaModel.findOne({ _id: serviceId });
+    existing.lift[0].status = 'Done';
+    return this.agendaModel.findOneAndUpdate(
+      {
+        _id: serviceId,
+      },
+      { $set: { lift: existing.lift } },
+      { new: true },
+    );
   }
 
   generateTimeSlots(startingTimeArray, numberOfSlots) {

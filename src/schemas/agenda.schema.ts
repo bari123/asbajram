@@ -16,6 +16,9 @@ export class LiftModel {
 
   @Prop()
   description: string;
+
+  @Prop()
+  status: string;
 }
 
 export type AgendaDocument = HydratedDocument<Agenda>;
