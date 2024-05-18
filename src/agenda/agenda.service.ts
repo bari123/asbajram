@@ -19,7 +19,7 @@ export class AgendaService {
     lift.status = 'Not Done';
 
     const updated = await this.agendaModel.findOneAndUpdate(
-      { date, estimation },
+      { date, estimation ,lift},
       { $set: { lift: lift } },
       { new: true },
     );
