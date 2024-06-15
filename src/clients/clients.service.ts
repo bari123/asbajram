@@ -69,8 +69,6 @@ export class ClientsService {
     );
   }
 
-
-
   addService(clientId: string, service: any) {
     service.serviceId = uuidv4();
     return this.clientModel.findOneAndUpdate(
@@ -84,13 +82,18 @@ export class ClientsService {
     return this.clientModel
       .findOne({ _id: id }, { service: 1 })
       .sort({ createdAt: -1 })
-      .select({ service: { $slice: 5 } })
+      .select({ service: { $slice: 5 } });
   }
 
   getServicesByCar(id: string, carId: string) {
     return this.clientModel.findOne(
       { _id: id, 'service.carId': carId },
       { service: 1, cars: 1 },
-    );
+    ).then(doc => {
+        if (!doc) return null;
+        // @ts-ignore
+      doc.service = doc.service.filter((s) => s.carId === carId);
+      return doc;
+    });;
   }
 }
