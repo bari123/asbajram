@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AgendaModule } from './agenda/agenda.module';
+import { ItemsModule } from './items/items.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AgendaModule } from './agenda/agenda.module';
     ),
     UserModule,
     AgendaModule,
+    ItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
