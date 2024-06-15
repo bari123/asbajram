@@ -22,12 +22,12 @@ export class ItemsService {
 
   async update(id: string, updateItemDto: UpdateItemDto) {
     return await this.itemsModel
-      .findOneAndUpdate({ id: id }, updateItemDto)
+      .findOneAndUpdate({ _id: id }, updateItemDto)
       .exec();
   }
 
   async remove(id: string) {
-    return await this.itemsModel.findOneAndDelete({ id: id }).exec();
+    return await this.itemsModel.findOneAndDelete({ _id: id }).exec();
   }
 
   async getItemsBySerialCode(serialCode) {
