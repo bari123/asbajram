@@ -8,8 +8,12 @@ import { Items } from '../schemas/items.schema';
 @Injectable()
 export class ItemsService {
   constructor(@InjectModel(Items.name) private itemsModel: Model<Items>) {}
-  create(createItemDto: CreateItemDto) {
-    return new this.itemsModel(createItemDto).save();
+  async create(createItemDto: CreateItemDto) {
+    return this.itemsModel.findOneAndUpdate(
+      { serialCode: createItemDto.serialCode },
+      { ...createItemDto },
+      { upsert: true, new: true }  // upsert creates a new document if no match is found
+    );
   }
 
   async findAll() {
