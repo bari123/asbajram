@@ -12,7 +12,7 @@ export class ItemsService {
     return this.itemsModel.findOneAndUpdate(
       { serialCode: createItemDto.serialCode },
       { ...createItemDto },
-      { upsert: true, new: true }  // upsert creates a new document if no match is found
+      { upsert: true, new: true },
     );
   }
 
