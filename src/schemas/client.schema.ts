@@ -62,6 +62,9 @@ class Service {
   @Prop()
   description: string;
 
+  @Prop()
+  invoiceId?: string;
+
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
 }

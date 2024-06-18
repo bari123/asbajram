@@ -4,11 +4,13 @@ import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Invoice } from '../schemas/invoice.schema';
+import { Items } from '../schemas/items.schema';
 
 @Injectable()
 export class InvoiceService {
   constructor(
     @InjectModel(Invoice.name) private invoiceModel: Model<Invoice>,
+    @InjectModel(Items.name) private itemsModel: Model<Items>,
   ) {}
 
   async create(createInvoiceDto: CreateInvoiceDto) {
@@ -34,6 +36,12 @@ export class InvoiceService {
       0,
     );
 
+    for (const items of createInvoiceDto.items) {
+      await this.itemsModel.findOneAndUpdate(
+        { serialCode: items.art },
+        { $inc: { qnt: -items.qty } },
+      );
+    }
     return await this.invoiceModel
       .findOneAndUpdate({ _id: createInvoiceDto._id }, createInvoiceDto, {
         upsert: true,

@@ -16,6 +16,18 @@ export class Items {
 
   @Prop()
   price: number;
+
+  @Prop()
+  carAndYear: string;
+
+  @Prop()
+  description: string;
+
+  @Prop()
+  engineType: string;
+
+  @Prop()
+  shelfNumber: string;
 }
 
 export const ItemsSchema = SchemaFactory.createForClass(Items);
