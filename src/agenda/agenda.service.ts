@@ -19,7 +19,7 @@ export class AgendaService {
     lift.status = 'Not Done';
 
     const updated = await this.agendaModel.findOneAndUpdate(
-      { date, estimation ,lift},
+      { date, estimation, lift },
       { $set: { lift: lift } },
       { new: true },
     );
@@ -31,7 +31,9 @@ export class AgendaService {
   }
 
   async findAll(currentDate: any) {
-    return await this.agendaModel.find({ date: currentDate.currentDate });
+    return await this.agendaModel
+      .find({ date: currentDate.currentDate })
+      .exec();
   }
 
   findOne(id: number) {
@@ -85,5 +87,10 @@ export class AgendaService {
     }
 
     return timeSlots;
+  }
+
+  async updateWithDrop(id: string, lift) {
+    console.log(lift);
+    return await this.agendaModel.findOneAndUpdate({ _id: id }, lift).exec();
   }
 }

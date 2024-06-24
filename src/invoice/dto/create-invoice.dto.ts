@@ -1,4 +1,4 @@
-import { ItemsModel } from '../../schemas/invoice.schema';
+import { ItemsModel } from "../../schemas/invoice.schema";
 
 export class CreateInvoiceDto {
   name: string;
@@ -6,5 +6,7 @@ export class CreateInvoiceDto {
   totalPrice: number;
   invoiceId: number;
   _id: any;
+  car: string;
+  km: string;
   discount: number;
 }

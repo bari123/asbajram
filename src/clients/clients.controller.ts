@@ -19,6 +19,13 @@ export class ClientsController {
     return this.clientsService.create(createClientDto);
   }
 
+  @Post(':id/edit')
+  editClient(
+    @Body() createClientDto: CreateClientDto,
+    @Param('id') id: string,
+  ) {
+    return this.clientsService.edit(createClientDto, id);
+  }
   @Get('/getAll')
   findAll() {
     return this.clientsService.findAll();
@@ -83,6 +90,4 @@ export class ClientsController {
   getServicesByCar(@Param('id') id: string, @Param('carId') carId: string) {
     return this.clientsService.getServicesByCar(id, carId);
   }
-
-
 }

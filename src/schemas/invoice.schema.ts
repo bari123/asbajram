@@ -33,6 +33,15 @@ export class Invoice {
 
   @Prop()
   discount: string;
+
+  @Prop()
+  status: boolean;
+
+  @Prop()
+  car: string;
+
+  @Prop()
+  km: string;
 }
 
 export const InvoiceSchema = SchemaFactory.createForClass(Invoice);

@@ -18,6 +18,12 @@ export class ClientsService {
     return createdClient.save();
   }
 
+  async edit(createClientDto: CreateClientDto,id:string) {
+    return await this.clientModel
+      .findOneAndUpdate({ _id:id }, createClientDto)
+      .exec();
+  }
+
   async findAll() {
     return await this.clientModel.find().exec();
   }
@@ -65,7 +71,8 @@ export class ClientsService {
   editCar(carId, clientId, car) {
     return this.clientModel.findOneAndUpdate(
       { _id: clientId, 'cars._id': carId },
-      { cars: car },
+      { $set: { 'cars.$': car } },
+      { new: true },
     );
   }
 
@@ -86,14 +93,13 @@ export class ClientsService {
   }
 
   getServicesByCar(id: string, carId: string) {
-    return this.clientModel.findOne(
-      { _id: id, 'service.carId': carId },
-      { service: 1, cars: 1 },
-    ).then(doc => {
+    return this.clientModel
+      .findOne({ _id: id, 'service.carId': carId }, { service: 1, cars: 1 })
+      .then((doc) => {
         if (!doc) return null;
         // @ts-ignore
-      doc.service = doc.service.filter((s) => s.carId === carId);
-      return doc;
-    });;
+        doc.service = doc.service.filter((s) => s.carId === carId);
+        return doc;
+      });
   }
 }

@@ -39,4 +39,9 @@ export class InvoiceController {
   remove(@Param('id') id: string) {
     return this.invoiceService.remove(id);
   }
+
+  @Post(':id/pay')
+  pay(@Param('id') id: string) {
+    return this.invoiceService.pay(id);
+  }
 }

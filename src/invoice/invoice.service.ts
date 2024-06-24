@@ -67,4 +67,10 @@ export class InvoiceService {
   async remove(id: string) {
     return await this.invoiceModel.findOneAndDelete({ _id: id }).exec();
   }
+
+  async pay(id) {
+    return await this.invoiceModel
+      .findOneAndUpdate({ _id: id }, { status: true })
+      .exec();
+  }
 }

@@ -44,4 +44,9 @@ export class AgendaController {
   editService(@Param('id') serviceId: string) {
     return this.agendaService.editService(serviceId);
   }
+
+  @Post('/:id/update')
+  updateWithDrop(@Param('id') id: string, @Body() lift: any) {
+    return this.agendaService.updateWithDrop(id, lift);
+  }
 }
