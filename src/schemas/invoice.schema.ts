@@ -12,6 +12,9 @@ export class ItemsModel {
 
   @Prop()
   qty: string;
+
+  @Prop()
+  total: string;
 }
 
 @Schema({ timestamps: true })

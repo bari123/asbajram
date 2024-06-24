@@ -66,7 +66,7 @@ export class ClientsController {
     return this.clientsService.deleteCar(carId, clientId);
   }
 
-  @Patch('/:id/car/:carId')
+  @Post('/:id/car/:carId')
   editCar(
     @Param('carId') carId: string,
     @Param('id') clientId: string,

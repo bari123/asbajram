@@ -31,7 +31,7 @@ export class InvoiceService {
 
     createInvoiceDto.totalPrice = createInvoiceDto.items.reduce(
       (total, item) => {
-        return total + parseInt(item.price, 10);
+        return total + parseInt(item.total, 10);
       },
       0,
     );
