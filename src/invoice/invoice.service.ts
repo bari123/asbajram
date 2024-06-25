@@ -73,4 +73,8 @@ export class InvoiceService {
       .findOneAndUpdate({ _id: id }, { status: true })
       .exec();
   }
+
+  async test(){
+    return 'test'
+  }
 }
