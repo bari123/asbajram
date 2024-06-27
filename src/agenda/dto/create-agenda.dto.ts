@@ -1,6 +1,7 @@
 import { CarsModel } from '../../schemas/client.schema';
 
 export interface CreateAgendaDto {
+  _id: string | null;
   lift: {
     time: string[];
     lift: string;

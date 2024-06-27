@@ -10,7 +10,7 @@ export class AgendaService {
   constructor(@InjectModel(Agenda.name) private agendaModel: Model<Agenda>) {}
 
   async create(createAgendaDto: CreateAgendaDto) {
-    const { date, estimation, lift } = createAgendaDto;
+    const { estimation, lift, _id } = createAgendaDto;
 
     if (estimation > 1) {
       lift.time = this.generateTimeSlots(lift.time, estimation);
@@ -19,8 +19,8 @@ export class AgendaService {
     lift.status = 'Not Done';
 
     const updated = await this.agendaModel.findOneAndUpdate(
-      { date, estimation, lift },
-      { $set: { lift: lift } },
+      { _id },
+      { $set: { lift, estimation } },
       { new: true },
     );
 
@@ -90,7 +90,6 @@ export class AgendaService {
   }
 
   async updateWithDrop(id: string, lift) {
-    console.log(lift);
     return await this.agendaModel.findOneAndUpdate({ _id: id }, lift).exec();
   }
 }
