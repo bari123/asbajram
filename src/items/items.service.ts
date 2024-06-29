@@ -35,31 +35,45 @@ export class ItemsService {
   }
 
   async soldItem(id: string, updateItemDto: any) {
-    const { date, _id, sold } = updateItemDto;
-    const itemUpdate = { item: updateItemDto, count: +sold };
-
     const existing = await this.soldItemsModel
-      .findOne({ date, 'items.item._id': _id })
+      .findOne({
+        date: updateItemDto.date,
+        'items.item._id': updateItemDto._id,
+      })
       .exec();
 
-    if (existing) {
-      await this.soldItemsModel.findOneAndUpdate(
-        { date, 'items.item._id': _id },
-        { $inc: { 'items.$.count': +sold } },
-      );
-    } else {
-      const existingDate = await this.soldItemsModel.findOne({ date });
-      if (existingDate) {
-        await this.soldItemsModel.findOneAndUpdate(
-          { date },
-          { $push: { items: itemUpdate } },
-        );
-      } else {
+    if (!existing) {
+      const existingDate = await this.soldItemsModel.findOne({
+        date: updateItemDto.date,
+      });
+      if (!existingDate) {
         await this.soldItemsModel.create({
-          items: [itemUpdate],
-          date,
+          items: [{ item: updateItemDto, count: +updateItemDto.sold }],
+          date: updateItemDto.date,
         });
+      } else {
+        await this.soldItemsModel.findOneAndUpdate(
+          {
+            date: updateItemDto.date,
+          },
+          {
+            $push: {
+              items: { item: updateItemDto, count: +updateItemDto.sold },
+            },
+          },
+        );
+        return;
       }
+    } else {
+      await this.soldItemsModel.findOneAndUpdate(
+        {
+          date: updateItemDto.date,
+          'items.item._id': updateItemDto._id,
+        },
+        {
+          $inc: { 'items.$.count': +updateItemDto.sold }, // update the count for the existing item
+        },
+      );
     }
   }
 
