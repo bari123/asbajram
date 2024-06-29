@@ -46,14 +46,16 @@ export class InvoiceService {
         { $inc: { qnt: -items.qty } },
         { new: true },
       );
-      const soldItem: any = {
-        ...item,
-        _id: item._id.toString(),
-        sold: items.qty,
-        date: new Date().toLocaleDateString(),
-      };
+      if (item !== null) {
+        const soldItem: any = {
+          ...item,
+          _id: item._id.toString(),
+          sold: items.qty,
+          date: new Date().toLocaleDateString(),
+        };
 
-      await this.itemsService.soldItem(item._id.toString(), soldItem);
+        await this.itemsService.soldItem(item._id.toString(), soldItem);
+      }
     }
     return await this.invoiceModel
       .findOneAndUpdate({ _id: createInvoiceDto._id }, createInvoiceDto, {
