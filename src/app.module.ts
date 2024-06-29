@@ -14,7 +14,7 @@ import { InvoiceModule } from './invoice/invoice.module';
     ClientsModule,
     AuthModule,
     MongooseModule.forRoot(
-      'mongodb+srv://asbajram:bajramservice@cluster0.6c1zwy6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+      'mongodb+srv://asbajram:bajramservice@cluster0.6c1zwy6.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0',
     ),
     UserModule,
     AgendaModule,

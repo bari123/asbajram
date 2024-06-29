@@ -40,6 +40,16 @@ export class ItemsController {
     return this.itemsService.update(id, updateItemDto);
   }
 
+  @Post('/sold/:id')
+  soldItem(@Param('id') id: string, @Body() updateItemDto: any) {
+    return this.itemsService.soldItem(id, updateItemDto);
+  }
+
+  @Post('get/sold')
+  getSoldItem(@Body() body: { date: string }) {
+    return this.itemsService.getSoldItems(body.date);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.itemsService.remove(id);
