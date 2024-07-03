@@ -12,6 +12,7 @@ export class ItemsService {
     @InjectModel(Items.name) private itemsModel: Model<Items>,
     @InjectModel(Sold.name) private soldItemsModel: Model<Sold>,
   ) {}
+
   async create(createItemDto: CreateItemDto) {
     return this.itemsModel.findOneAndUpdate(
       { serialCode: createItemDto.serialCode },
@@ -87,5 +88,55 @@ export class ItemsService {
 
   async getItemsBySerialCode(serialCode) {
     return await this.itemsModel.findOne({ serialCode: serialCode }).exec();
+  }
+
+  async getStatss() {
+    const result = [];
+    const dateSoldMap = new Map();
+    const items = await this.soldItemsModel.find();
+
+    for (const item of items) {
+      for (const an of item.items) {
+        const date = item.date;
+        const count = parseInt(an.count);
+        if (dateSoldMap.has(date)) {
+          dateSoldMap.set(date, dateSoldMap.get(date) + count);
+        } else {
+          dateSoldMap.set(date, count);
+        }
+      }
+    }
+
+    dateSoldMap.forEach((sold, date) => {
+      result.push({ x: date, y: sold });
+    });
+
+    return result;
+  }
+
+  async lastMonthStats() {
+    let max = 0;
+    let highestSellingItem;
+    let lowestSellingItem;
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    const items = await this.soldItemsModel
+      .find({
+        createdAt: { $gte: lastMonth },
+      })
+      .exec();
+    for (const item of items) {
+      for (const an of item.items) {
+        if (parseInt(an.count) > max) {
+          max = parseInt(an.count);
+          highestSellingItem = an;
+        }
+        if (parseInt(an.count) <= 1) {
+          lowestSellingItem = an;
+        }
+      }
+    }
+
+    return { highest: highestSellingItem, lowest: lowestSellingItem };
   }
 }

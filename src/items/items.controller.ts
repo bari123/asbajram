@@ -45,6 +45,16 @@ export class ItemsController {
     return this.itemsService.soldItem(id, updateItemDto);
   }
 
+  @Get('/sold/stats')
+  stats() {
+    return this.itemsService.getStatss();
+  }
+
+  @Get('sold/stats/month')
+  lastMonthStats() {
+    return this.itemsService.lastMonthStats();
+  }
+
   @Post('get/sold')
   getSoldItem(@Body() body: { date: string }) {
     return this.itemsService.getSoldItems(body.date);
