@@ -45,6 +45,8 @@ export class Invoice {
 
   @Prop()
   km: string;
+
+  createdAt?: any;
 }
 
 export const InvoiceSchema = SchemaFactory.createForClass(Invoice);

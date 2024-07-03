@@ -88,4 +88,71 @@ export class InvoiceService {
       .findOneAndUpdate({ _id: id }, { status: true })
       .exec();
   }
+
+  async getStats() {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    const invoice = await this.invoiceModel.find({
+      createdAt: { $gte: lastMonth },
+    });
+
+    const clientData = invoice.reduce((acc, invoice) => {
+      if (!acc[invoice.clientName]) {
+        acc[invoice.clientName] = { count: 0, totalAmount: 0 };
+      }
+      acc[invoice.clientName].count += 1;
+      acc[invoice.clientName].totalAmount += invoice.totalPrice;
+      return acc;
+    }, {});
+
+    const totalInvoices = invoice.length;
+
+    const result = [];
+    const resultPaid = [];
+
+    for (const client in clientData) {
+      const clientInfo = clientData[client];
+      resultPaid.push({
+        name: client,
+        y: ((clientInfo.count / totalInvoices) * 100).toFixed(2), // Percentage of invoices
+        totalAmount: clientInfo.totalAmount, // Sum of amounts
+      });
+      result.push({
+        name: client,
+        y: ((clientInfo.count / totalInvoices) * 100).toFixed(2), // Percentage of invoices
+      });
+    }
+    const highestClient = resultPaid.reduce(
+      (max: number, client: { y: number }) => {
+        return client.y > max ? client.y : max;
+      },
+      resultPaid[0],
+    );
+
+    return { result, highestClient };
+  }
+
+  async getPeakSales() {
+    let result: any;
+    const results = [];
+    const invoices = await this.invoiceModel.find();
+    for (const invoice of invoices) {
+      results.push({
+        x: invoice.createdAt.toLocaleDateString(),
+        y: (await invoice).totalPrice,
+      });
+    }
+    const simplifiedArray = results.reduce((acc, curr) => {
+      if (acc[curr.x]) {
+        acc[curr.x].y += curr.y;
+      } else {
+        acc[curr.x] = { x: curr.x, y: curr.y };
+      }
+      return acc;
+    }, {});
+
+    // eslint-disable-next-line prefer-const
+    result = Object.values(simplifiedArray);
+    return result;
+  }
 }

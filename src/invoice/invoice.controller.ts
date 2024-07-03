@@ -44,4 +44,14 @@ export class InvoiceController {
   pay(@Param('id') id: string) {
     return this.invoiceService.pay(id);
   }
+
+  @Get('stats/clients')
+  getClientStats() {
+    return this.invoiceService.getStats();
+  }
+
+  @Get('stats/peakSales')
+  getPeakStats() {
+    return this.invoiceService.getPeakSales();
+  }
 }
