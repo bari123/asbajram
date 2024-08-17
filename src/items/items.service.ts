@@ -115,9 +115,6 @@ export class ItemsService {
   }
 
   async lastMonthStats() {
-    let max = 0;
-    let highestSellingItem;
-    let lowestSellingItem;
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
     const items = await this.soldItemsModel
@@ -125,18 +122,22 @@ export class ItemsService {
         createdAt: { $gte: lastMonth },
       })
       .exec();
+
+    const itemCounts = [];
+
     for (const item of items) {
       for (const an of item.items) {
-        if (parseInt(an.count) > max) {
-          max = parseInt(an.count);
-          highestSellingItem = an;
-        }
-        if (parseInt(an.count) <= 1) {
-          lowestSellingItem = an;
-        }
+        const count = parseInt(an.count);
+        itemCounts.push({ item: an, count });
       }
     }
 
-    return { highest: highestSellingItem, lowest: lowestSellingItem };
+    itemCounts.sort((a, b) => b.count - a.count);
+
+    const highestSellingItems = itemCounts.slice(0, 3).map((item) => item.item);
+
+    const lowestSellingItem = itemCounts.find((item) => item.count <= 1)?.item;
+
+    return { highest: highestSellingItems, lowest: lowestSellingItem };
   }
 }
